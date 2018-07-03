@@ -1,2 +1,0 @@
-# CurrencyDisplayer
-Created with CodeSandbox
