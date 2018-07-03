@@ -1,17 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import { FetchCurrenciesContainer } from "./FetchCurrenciesContainer";
+
 import "./styles.css";
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <h2>Start editing to see some magic happen!</h2>
-      <h2>Just for temp</h2>
-    </div>
-  );
-}
+const App = () => {
+  return <FetchCurrenciesContainer />;
+};
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
