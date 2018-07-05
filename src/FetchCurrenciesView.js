@@ -6,12 +6,18 @@ export class FetchCurrenciesView extends React.Component {
 
     this._handleOnChange = this._handleOnChange.bind(this);
     this._handleOnSubmit = this._handleOnSubmit.bind(this);
+    this._displayCurrencies = this._displayCurrencies.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    //const { currencies } = nextProps;
+    //currencies ? console.log(currencies) : null;
   }
 
   _handleOnSubmit(e) {
     const { onSubmit } = this.props;
     e.preventDefault();
-    console.log(e.target.value);
+
     if (onSubmit) {
       onSubmit(e);
     }
@@ -20,11 +26,14 @@ export class FetchCurrenciesView extends React.Component {
   _handleOnChange(e) {
     const { onChange } = this.props;
 
-    console.log(e.target.value);
-
     if (onChange) {
       onChange(e);
     }
+  }
+
+  _displayCurrencies() {
+    const { currencies } = this.props;
+    return currencies ? Object.keys(currencies).map(currencyName => <div align="center" key={currencyName}> {currencyName} : {currencies[currencyName]} </div>) : null;
   }
 
   render() {
@@ -37,7 +46,7 @@ export class FetchCurrenciesView extends React.Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
-        <h2 align="center">TRY: {this.props.TRY}</h2>
+        {this._displayCurrencies()}
       </div>
     );
   }
