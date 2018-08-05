@@ -1,5 +1,12 @@
 import React from "react";
 
+var divStyle = {
+  margin: "auto",
+  position: "absolute",
+  left: "40%",
+  bottom: 0
+};
+
 export class FetchCurrenciesView extends React.Component {
   constructor(props) {
     super(props);
@@ -11,7 +18,7 @@ export class FetchCurrenciesView extends React.Component {
   _handleOnSubmit(e) {
     const { onSubmit } = this.props;
     e.preventDefault();
-    console.log(e.target.value);
+
     if (onSubmit) {
       onSubmit(e);
     }
@@ -20,24 +27,54 @@ export class FetchCurrenciesView extends React.Component {
   _handleOnChange(e) {
     const { onChange } = this.props;
 
-    console.log(e.target.value);
-
     if (onChange) {
       onChange(e);
     }
   }
 
+  _displayCurrencyValue() {
+    const { base, currencies, text } = this.props;
+
+    if (currencies && base.toUpperCase() === "TRY") {
+      return (
+        <h2 align="center">
+          <p>1 {base.toUpperCase()} = 1 TRY</p>
+        </h2>
+      );
+    } else if (currencies) {
+      return (
+        <h2 align="center">
+          <p>
+            1 {base.toUpperCase()} = {currencies.TRY} TRY
+          </p>
+        </h2>
+      );
+    } else {
+      return (
+        <div align="center">
+          <p>
+            You gave wrong currency type! Please give the correct type of
+            currency.
+          </p>
+        </div>
+      );
+    }
+  }
+
   render() {
+    const { currencies, text } = this.props;
+
     return (
       <div>
-        <form onSubmit={this._handleOnSubmit}>
+        <form align="center" onSubmit={this._handleOnSubmit}>
           <label>
             Currency:
             <input type="text" onChange={this._handleOnChange} />
           </label>
           <input type="submit" value="Submit" />
         </form>
-        <h2 align="center">TRY: {this.props.TRY}</h2>
+        {this._displayCurrencyValue()}
+        <p style={divStyle}>Initially given values are based on USD</p>
       </div>
     );
   }

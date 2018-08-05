@@ -6,7 +6,8 @@ export class FetchCurrenciesContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: "",
+      text: "USD",
+      base: "USD",
       currencies: []
     };
 
@@ -15,7 +16,7 @@ export class FetchCurrenciesContainer extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://api.openrates.io/latest?base=USD")
+    fetch("https://api.openrates.io/latest?base=" + this.state.base)
       .then(response => {
         return response.json();
       })
@@ -30,8 +31,21 @@ export class FetchCurrenciesContainer extends React.Component {
   }
 
   _handleOnSubmit(e) {
-    e.preventDefault();
-    console.log(this.state.text);
+    const { text } = this.state;
+
+    if (text) {
+      fetch("https://api.openrates.io/latest?base=" + text)
+        .then(response => {
+          return response.json();
+        })
+        .then(
+          data =>
+            data ? this.setState({ currencies: data.rates, base: text }) : null
+        )
+        .catch(error => console.log("Something went wrong 2 ..."));
+    } else {
+      alert("Please give a currency type!");
+    }
   }
 
   render() {
@@ -39,7 +53,9 @@ export class FetchCurrenciesContainer extends React.Component {
       <FetchCurrenciesView
         onChange={this._handleOnChange}
         onSubmit={this._handleOnSubmit}
-        TRY={this.state.currencies.TRY}
+        currencies={this.state.currencies}
+        text={this.state.text}
+        base={this.state.base}
       />
     );
   }
