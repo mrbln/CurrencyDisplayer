@@ -52,10 +52,7 @@ export class FetchCurrenciesView extends React.Component {
     } else {
       return (
         <div align="center">
-          <p>
-            You gave wrong currency type! Please give the correct type of
-            currency.
-          </p>
+          <p>Wrong currency type! Please give the correct type of currency.</p>
         </div>
       );
     }
