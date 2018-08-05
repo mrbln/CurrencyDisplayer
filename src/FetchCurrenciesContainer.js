@@ -6,12 +6,22 @@ export class FetchCurrenciesContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: "",
-      currencies: null
+      text: "USD",
+      base: "USD",
+      currencies: []
     };
 
     this._handleOnSubmit = this._handleOnSubmit.bind(this);
     this._handleOnChange = this._handleOnChange.bind(this);
+  }
+
+  componentDidMount() {
+    fetch("https://api.openrates.io/latest?base=" + this.state.base)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => this.setState({ currencies: data.rates }))
+      .catch(error => console.log("Something went wrong 2 ..."));
   }
 
   _handleOnChange(e) {
@@ -20,21 +30,22 @@ export class FetchCurrenciesContainer extends React.Component {
     });
   }
 
-  fetchCurrencies(url) {
-    fetch(url)
-    .then(response => {
-      return response.json();
-    })
-    .then(data => this.setState({ currencies: data.rates }))
-    .catch(error => console.log("Something went wrong 2 ..."));
-  }
-
   _handleOnSubmit(e) {
-    e.preventDefault();
+    const { text } = this.state;
 
-    const url = `https://api.openrates.io/latest?base=${this.state.text}`;
-    console.log("url: " + url);
-    this.fetchCurrencies(url);
+    if (text) {
+      fetch("https://api.openrates.io/latest?base=" + text)
+        .then(response => {
+          return response.json();
+        })
+        .then(
+          data =>
+            data ? this.setState({ currencies: data.rates, base: text }) : null
+        )
+        .catch(error => console.log("Something went wrong 2 ..."));
+    } else {
+      alert("Please give a currency type!");
+    }
   }
 
   render() {
@@ -44,6 +55,7 @@ export class FetchCurrenciesContainer extends React.Component {
         onSubmit={this._handleOnSubmit}
         currencies={this.state.currencies}
         text={this.state.text}
+        base={this.state.base}
       />
     );
   }
